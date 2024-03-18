@@ -1,1 +1,1 @@
-# Getting Started with Create React App
+# 코알누-리액트 스터디 프로젝트 01-가위바위보게임 입니다.
