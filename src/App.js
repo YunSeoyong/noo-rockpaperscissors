@@ -36,6 +36,7 @@ function App() {
 
   return (
     <div className='App'>
+        <GlobalStyled />
         <div className="main">
             <Box title="You" item={userSelect} />
             <Box title="Computer" />
