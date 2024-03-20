@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { createGlobalStyle } from 'styled-components';
-import reset from "styled-reset"
+import { useEffect, useState } from 'react';
 
 import './App.css';
 import Box from './components/Box';
@@ -29,17 +27,43 @@ const choice = {
 
 function App() {
     const [userSelect, setUserSelect] = useState(null);
+    const [computerSelect, setComputerSelect] = useState(null);
+    const [result, setResult] = useState('');
+    const [computerResult, setComputerResult] = useState('');
 
     const play = (userChoice) => {
         setUserSelect(choice[userChoice]);
-    }
+        let computerChoice = randomChoice();
+        setComputerSelect(computerChoice);
+        setResult(judgement(choice[userChoice], computerChoice));
+        setComputerResult(judgement(computerChoice, choice[userChoice]));
+    };
+
+    const randomChoice = () => {
+        let itemArray = Object.keys(choice);
+        let randomItem = Math.floor(Math.random() * itemArray.length);
+        let final = itemArray[randomItem];
+
+        return choice[final];
+    };
+
+    const judgement = (user, computer) => {
+        if(user.name === computer.name) {
+            return "draw";
+        } else if(user.name === 'Rock') {
+            return computer.name === 'Scissors' ? 'Win' : 'Lose'
+        } else if (user.name === 'Scissors') {
+            return computer.name === 'Paper' ? 'Win' : 'Lose'
+        } else if (user.name === 'Paper') {
+            return computer.name === 'Rock' ? 'Win' : 'Lose'
+        };
+    };
 
   return (
     <div className='App'>
-        <GlobalStyled />
         <div className="main">
-            <Box title="You" item={userSelect} />
-            <Box title="Computer" />
+            <Box title="You" item={userSelect} result={result} />
+            <Box title="Computer" item={computerSelect} result={computerResult} />
         </div>
         <div className='main'>
             <button onClick={() => play('scissors')}>가위</button>
@@ -51,7 +75,3 @@ function App() {
 }
 
 export default App;
-
-const GlobalStyled = createGlobalStyle`
-    ${reset}
-`;
