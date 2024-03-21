@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import './App.css';
 import Box from './components/Box';
+import ScoreBorad from './components/ScoreBorad';
 
 // 1. 박스 2개 (타이틀, 사진, 결과)
 // 2. 가위 바위 보 버튼
@@ -30,6 +31,8 @@ function App() {
     const [computerSelect, setComputerSelect] = useState(null);
     const [result, setResult] = useState('');
     const [computerResult, setComputerResult] = useState('');
+    const [userWin, setUserWin] = useState(0);
+    const [computerWin, setComputerWin] = useState(0);
 
     const play = (userChoice) => {
         setUserSelect(choice[userChoice]);
@@ -37,6 +40,7 @@ function App() {
         setComputerSelect(computerChoice);
         setResult(judgement(choice[userChoice], computerChoice));
         setComputerResult(judgement(computerChoice, choice[userChoice]));
+        changeScore(judgement(choice[userChoice], computerChoice));
     };
 
     const randomChoice = () => {
@@ -47,6 +51,14 @@ function App() {
         return choice[final];
     };
 
+    const changeScore = (result) => {
+        if(result === 'Win') {
+            setUserWin(userWin + 1);
+        } else if (result === 'Lose') {
+            setComputerWin(computerWin + 1);
+        };
+    };
+    
     const judgement = (user, computer) => {
         if(user.name === computer.name) {
             return "draw";
@@ -59,16 +71,34 @@ function App() {
         };
     };
 
+    const handleReset = () => {
+        setUserWin(0);
+        setComputerWin(0);
+        setUserSelect(null);
+        setComputerSelect(null);
+        setResult('');
+        setComputerResult('');
+    };
+
+
   return (
     <div className='App'>
+        <h1>Rock Paper Scissors!</h1>
+        <ScoreBorad userWin={userWin} computerWin={computerWin} />
+        <button className='reset' onClick={handleReset}>RESET</button>
         <div className="main">
             <Box title="You" item={userSelect} result={result} />
             <Box title="Computer" item={computerSelect} result={computerResult} />
         </div>
-        <div className='main'>
+        {/* <div className='main'>
             <button onClick={() => play('scissors')}>가위</button>
             <button onClick={() => play('rock')}>바위</button>
             <button onClick={() => play('paper')}>보</button>
+        </div> */}
+        <div className='main'>
+            <button onClick={() => play('rock')}>{choice.rock.name}</button>
+            <button onClick={() => play('paper')}>{choice.paper.name}</button>
+            <button onClick={() => play('scissors')}>{choice.scissors.name}</button>
         </div>
     </div>
   );
